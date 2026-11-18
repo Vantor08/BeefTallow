@@ -1,0 +1,221 @@
+{%- comment -%}
+  SHOPIFY PAGE MAPPING: templates/product.liquid -> PRODUCT PAGE
+  Self-contained: full long-form product page + its own styles in one file.
+  Buy box posts to Shopify /cart/add. Bundle tiers are built from the product's real variants.
+{%- endcomment -%}
+{%- assign cv = product.selected_or_first_available_variant -%}
+
+<style>
+  .pdp{max-width:1200px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+  .pdp__media{position:sticky;top:90px}
+  .pdp__main{background:var(--bg3);border-radius:16px;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:var(--serif);font-size:2rem}
+  .pdp h1{font-size:clamp(1.8rem,3.6vw,2.6rem);margin:8px 0}
+  .pdp__sub{opacity:.78;margin:14px 0}
+  .pdp__bullets{list-style:none;margin:18px 0;display:flex;flex-direction:column;gap:10px}
+  .pdp__bullets li{display:flex;gap:10px;align-items:flex-start;font-size:.96rem}
+  .pdp__bullets .ck{color:var(--gold);font-weight:700}
+  .tier{display:block;border:2px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;cursor:pointer;position:relative;transition:.15s}
+  .tier.selected{border-color:var(--gold);background:var(--bg3)}
+  .tier__row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .tier__name{font-weight:700}
+  .tier__desc{font-size:.84rem;opacity:.65}
+  .tier__price{font-family:var(--serif);font-size:1.3rem}
+  .tier__badge{position:absolute;top:-10px;left:16px;background:var(--gold);color:#fff;font-size:.66rem;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.04em}
+  .tier input{position:absolute;opacity:0}
+  .pdp__reassure{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:.82rem;opacity:.7;justify-content:center}
+  .pdp__pay{display:flex;gap:6px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+  .pdp__pay span{background:var(--bg3);border:1px solid var(--line);border-radius:5px;font-size:.6rem;font-weight:700;padding:5px 7px;opacity:.75}
+  .pblock{padding:60px 20px}
+  .pblock .inner{max-width:1100px;margin:0 auto}
+  .pblock--dark{background:var(--brown);color:var(--ctatext)}
+  .pblock--cream{background:var(--bg3)}
+  .pblock h2{font-size:clamp(1.6rem,3.4vw,2.3rem);text-align:center;margin-bottom:8px}
+  .pblock .sub{text-align:center;opacity:.72;max-width:600px;margin:0 auto 32px}
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card3{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:26px 22px}
+  .pblock--dark .card3{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}
+  .card3 .i{font-size:1.6rem;margin-bottom:10px}
+  .card3 .num{width:32px;height:32px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;margin-bottom:12px}
+  .card3 h3{font-size:1.15rem;margin-bottom:8px}
+  .card3 .out{color:var(--gold);font-weight:600;margin-bottom:6px;font-size:.95rem}
+  .card3 p{opacity:.74;font-size:.92rem}
+  .pblock--dark .card3 p{opacity:.8}
+  .ctbl{width:100%;border-collapse:collapse;margin-top:10px;background:var(--bg2);border-radius:14px;overflow:hidden}
+  .ctbl th,.ctbl td{padding:14px 12px;text-align:center;border-bottom:1px solid var(--line);font-size:.92rem}
+  .ctbl th{font-family:var(--serif);font-weight:500}
+  .ctbl th:last-child,.ctbl td:last-child{background:var(--bg3)}
+  .ctbl td:first-child{text-align:left;font-weight:600}
+  .yes{color:#2e7d32;font-weight:700}.no{color:#c0392b}
+  .gbox{display:flex;gap:28px;align-items:center;max-width:860px;margin:0 auto;background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:32px}
+  .gbox__badge{min-width:96px;height:96px;border-radius:50%;background:var(--gold);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--serif);font-size:2rem;line-height:1}
+  .gbox__badge small{font-size:.6rem;letter-spacing:.1em}
+  .faq{max-width:760px;margin:0 auto}
+  .faqi{border-bottom:1px solid var(--line)}
+  .faqi__q{width:100%;background:none;border:none;text-align:left;padding:18px 0;font-size:1.02rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;gap:12px;color:inherit}
+  .faqi__q .pm{color:var(--gold);transition:.2s}
+  .faqi.open .faqi__q .pm{transform:rotate(45deg)}
+  .faqi__a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .faqi.open .faqi__a{max-height:320px}
+  .faqi__a p{padding:0 0 18px;opacity:.76;font-size:.95rem}
+  .sticky-atc{position:fixed;left:0;right:0;bottom:0;background:var(--bg2);border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(0,0,0,.08);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;transform:translateY(120%);transition:.25s;z-index:60}
+  .sticky-atc.show{transform:translateY(0)}
+  .sticky-atc b{font-size:.95rem}
+  @media(max-width:768px){
+    .pdp{grid-template-columns:1fr;gap:28px}.pdp__media{position:static}
+    .cards3{grid-template-columns:1fr}
+    .ctbl{font-size:.8rem}.ctbl th,.ctbl td{padding:10px 6px}
+    .gbox{flex-direction:column;text-align:center}
+  }
+</style>
+
+<section class="pdp" id="buy">
+  <div class="pdp__media">
+    <div class="pdp__main">
+      {%- if product.featured_image -%}<img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.title }}" width="600" height="600">{%- else -%}Vallore™{%- endif -%}
+    </div>
+  </div>
+  <div class="pdp__buy">
+    <p class="overline">The Vallore™ Face Ritual</p>
+    <h1>{{ product.title | default: 'Vallore™ Tallow Face Balm' }}</h1>
+    <div class="rating-row"><span class="stars stars-lg">★★★★★</span><span style="font-weight:700">4.8</span><span class="count">· 2,140+ verified reviews</span></div>
+    <p class="pdp__sub">{{ product.description | default: 'The one-step routine for men who skip the whole routine — grass-fed tallow, raw honey, jojoba, nothing else.' }}</p>
+    <ul class="pdp__bullets">
+      <li><span class="ck">✓</span>Looks rested in the mirror — even on 5 hours of sleep</li>
+      <li><span class="ck">✓</span>Shave without the sting, burn, or razor rash</li>
+      <li><span class="ck">✓</span>Replaces 5 bathroom products with one jar</li>
+      <li><span class="ck">✓</span>Ten-second habit you'll actually keep</li>
+    </ul>
+    <form action="/cart/add" method="post" id="pdpForm">
+      <input type="hidden" name="id" id="pdpVariantId" value="{{ cv.id }}">
+      <p style="font-weight:600;margin-bottom:10px">Choose your supply:</p>
+      {%- if product.variants.size > 1 -%}
+        {%- for v in product.variants -%}
+          <label class="tier{% if v.id == cv.id %} selected{% endif %}" data-tier data-variant="{{ v.id }}">
+            {%- if forloop.index == 2 %}<span class="tier__badge">MOST POPULAR</span>{% endif -%}
+            <input type="radio" name="tier" value="{{ v.id }}"{% if v.id == cv.id %} checked{% endif %}>
+            <span class="tier__row">
+              <span><span class="tier__name">{{ v.title }}</span><br><span class="tier__desc">{% if v.available %}In stock · ships in 24h{% else %}Sold out{% endif %}</span></span>
+              <span class="tier__price">{{ v.price | money }}{% if v.compare_at_price > v.price %} <span class="price-compare" style="font-size:.9rem">{{ v.compare_at_price | money }}</span>{% endif %}</span>
+            </span>
+          </label>
+        {%- endfor -%}
+      {%- else -%}
+        <label class="tier selected" data-tier data-variant="{{ cv.id }}">
+          <input type="radio" name="tier" value="{{ cv.id }}" checked>
+          <span class="tier__row"><span class="tier__name">1 Jar · 30-day supply</span><span class="tier__price">{{ cv.price | money | default: '$34.00' }}</span></span>
+        </label>
+      {%- endif -%}
+      <button type="submit" name="add" class="btn btn-primary btn-lg btn-full" style="margin-top:14px">Add To Cart</button>
+      <div class="pdp__reassure"><span>🔒 Secure checkout</span><span>🚚 Ships in 24h</span><span>↩️ 60-day guarantee</span></div>
+    </form>
+    <div class="pdp__pay"><span>VISA</span><span>MASTERCARD</span><span>AMEX</span><span>SHOP PAY</span><span>APPLE PAY</span></div>
+  </div>
+</section>
+
+<section class="pblock">
+  <div class="inner">
+    <p class="overline" style="text-align:center">What Actually Changes</p>
+    <h2>It's Not About Skincare. It's About How Monday Feels.</h2>
+    <div class="cards3" style="margin-top:28px">
+      <div class="card3"><div class="i">🪞</div><h3>Walk Past The Mirror Without Flinching</h3><p class="out">The 6am glance stops being a gut-punch.</p><p>That tired, grey, "who is that" face softens. You look like you slept — even when you didn't.</p></div>
+      <div class="card3"><div class="i">📸</div><h3>Stop Dodging The Camera</h3><p class="out">You stay in the photo instead of taking it.</p><p>The flinch when someone raises a phone — gone. You stop editing yourself out of your own kid's birthday pictures.</p></div>
+      <div class="card3"><div class="i">🫙</div><h3>One Jar That's Actually Yours</h3><p class="out">Ten seconds a day that are just yours.</p><p>Not her ten-step shelf. One small thing you do for yourself that happens to make your face look less wrecked by Friday.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pblock pblock--cream">
+  <div class="inner">
+    <p class="overline" style="text-align:center">Why It Works</p>
+    <h2>Your Skin Already Knows What Tallow Is.</h2>
+    <p class="sub">Tallow is close to the oils your own skin makes — that's why it sinks in instead of sitting on top like a drugstore lotion.</p>
+    <div class="cards3">
+      <div class="card3"><div class="num">1</div><h3>It matches your skin</h3><p>The fatty acids in grass-fed tallow are close to the ones in human skin. Your face recognizes it and absorbs it fast — no greasy film.</p></div>
+      <div class="card3"><div class="num">2</div><h3>It repairs overnight</h3><p>Raw manuka honey calms inflammation and helps skin recover while you sleep. That's the "less angry by morning" effect.</p></div>
+      <div class="card3"><div class="num">3</div><h3>It balances oil</h3><p>Jojoba oil signals your skin to stop overproducing. Shiny forehead, dry cheeks — it helps both from the same jar.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pblock pblock--dark">
+  <div class="inner">
+    <p class="overline" style="text-align:center;color:var(--gold2)">The Whole Routine</p>
+    <h2>Ten Seconds. That's The Instructions.</h2>
+    <div class="cards3" style="margin-top:28px">
+      <div class="card3"><div class="num">1</div><h3>Scoop a little</h3><p>Fingertip amount. A jar lasts a month because you barely need any.</p></div>
+      <div class="card3"><div class="num">2</div><h3>Warm &amp; press in</h3><p>Rub between your fingers for a second — it melts into an oil — then press into face and neck.</p></div>
+      <div class="card3"><div class="num">3</div><h3>That's it</h3><p>No toner, no serum, no second bottle. Morning, night, or both. Walk away. You're done.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pblock">
+  <div class="inner">
+    <p class="overline" style="text-align:center">The Honest Comparison</p>
+    <h2>Three Ways To Deal With Your Face</h2>
+    <table class="ctbl">
+      <thead><tr><th></th><th>Drugstore Lotion</th><th>Her 10-Step Shelf</th><th>Vallore™</th></tr></thead>
+      <tbody>
+        <tr><td>One simple step</td><td><span class="yes">✓</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td></tr>
+        <tr><td>Absorbs without grease</td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+        <tr><td>No mystery ingredients</td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td></tr>
+        <tr><td>Made for a man's skin</td><td><span class="no">✕</span></td><td><span class="no">✕</span></td><td><span class="yes">✓</span></td></tr>
+        <tr><td>Cost per month</td><td>$8</td><td>$120+</td><td>$17</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="pblock pblock--cream" id="reviews">
+  <div class="inner" style="text-align:center">
+    <p class="overline">Verified Reviews</p>
+    <h2>What Guys Actually Say After A Month</h2>
+    <div class="revwrap" data-revcar style="margin-top:28px">
+      <div class="revtrack" data-revtrack>
+        <div class="revcard"><div class="revcard__h"><div class="revav">MA</div><div><div class="revname">Marcus T.</div><div class="revloc">Austin, TX · Verified ✓</div></div><span class="revverified">★★★★★</span></div><p>My daughter asked why I "do the jar." Told her it's so I take care of myself like I take care of her. Face looks less wrecked too.</p></div>
+        <div class="revcard"><div class="revcard__h"><div class="revav">DE</div><div><div class="revname">Devon R.</div><div class="revloc">Denver, CO · Verified ✓</div></div><span class="revverified">★★★★★</span></div><p>41, work outside, hands were shot. Three weeks in and the cracked knuckles finally closed up. This I'll actually do.</p></div>
+        <div class="revcard"><div class="revcard__h"><div class="revav">JA</div><div><div class="revname">James L.</div><div class="revloc">Columbus, OH · Verified ✓</div></div><span class="revverified">★★★★★</span></div><p>Wife has a whole shelf. I've got one jar. Mine's easier to keep up with than her ten bottles. Zero smell, not greasy. Sold.</p></div>
+        <div class="revcard"><div class="revcard__h"><div class="revav">RO</div><div><div class="revname">Rob C.</div><div class="revloc">Sacramento, CA · Verified ✓</div></div><span class="revverified">★★★★★</span></div><p>The one thing in my day that's mine. Ten seconds, nobody needs anything from me. Looking less rough by Friday is the bonus.</p></div>
+      </div>
+    </div>
+    <div class="revdots">
+      <button class="revdot active" data-revdot></button><button class="revdot" data-revdot></button><button class="revdot" data-revdot></button><button class="revdot" data-revdot></button>
+    </div>
+  </div>
+</section>
+
+<section class="pblock">
+  <div class="gbox">
+    <div class="gbox__badge">60<small>DAY</small></div>
+    <div><h2 style="text-align:left;font-size:1.5rem;margin-bottom:8px">Use The Whole Jar. Still Not Impressed? Full Refund.</h2>
+      <p style="opacity:.76">Try it for 60 days. Use every last scoop. If your face doesn't look better and your mornings don't feel easier, email us and we'll refund you — jar empty or not. The risk is entirely ours.</p></div>
+  </div>
+</section>
+
+<section class="pblock pblock--cream" id="faq">
+  <div class="inner">
+    <p class="overline" style="text-align:center">Straight Answers</p>
+    <h2>The Questions Guys Actually Ask</h2>
+    <div class="faq" style="margin-top:24px">
+      <div class="faqi" data-faq><button class="faqi__q" data-faq-trig>Does it smell like beef?<span class="pm">+</span></button><div class="faqi__a"><p>No. The unscented jar has a faint natural note that disappears within a minute. No cologne, no fragrance, nothing anyone will notice across the dinner table.</p></div></div>
+      <div class="faqi" data-faq><button class="faqi__q" data-faq-trig>Is it greasy?<span class="pm">+</span></button><div class="faqi__a"><p>It goes on like an oil and absorbs in about 30 seconds because tallow matches your skin's own oils. A few seconds after you press it in, your face feels normal — not shiny, not slick.</p></div></div>
+      <div class="faqi" data-faq><button class="faqi__q" data-faq-trig>I have oily skin. Won't this make it worse?<span class="pm">+</span></button><div class="faqi__a"><p>Opposite. The jojoba oil tells your skin to stop overproducing. Guys with oily and combination skin usually notice the biggest difference.</p></div></div>
+      <div class="faqi" data-faq><button class="faqi__q" data-faq-trig>How long does a jar last?<span class="pm">+</span></button><div class="faqi__a"><p>About a month with daily use, because you only need a fingertip amount. The 2- and 3-jar bundles are about never running out and locking in the lower price.</p></div></div>
+      <div class="faqi" data-faq><button class="faqi__q" data-faq-trig>Can I use it after shaving?<span class="pm">+</span></button><div class="faqi__a"><p>That's one of the best times. It calms razor burn and rash instead of stinging like an alcohol aftershave. Press a little in right after you rinse.</p></div></div>
+      <div class="faqi" data-faq><button class="faqi__q" data-faq-trig>What if it doesn't work for me?<span class="pm">+</span></button><div class="faqi__a"><p>Email us within 60 days for a full refund — even if the jar's empty. You use it, and if it's not for you, the risk is on us, not you.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pblock pblock--dark" style="text-align:center">
+  <div class="inner">
+    <h2>One Jar. One Habit. Ten Seconds A Day.</h2>
+    <p class="sub" style="opacity:.8">Backed by a 60-day money-back guarantee. The only thing you can lose is the tired face.</p>
+    <a href="#buy" class="btn btn-gold btn-lg">Choose My Supply →</a>
+  </div>
+</section>
+
+<div class="sticky-atc" id="stickyAtc">
+  <div><b>{{ product.title | default: 'Vallore™ Tallow Face Balm' }}</b><br><span class="stars" style="font-size:.78rem">★★★★★ <span class="count">4.8</span></span></div>
+  <a href="#buy" class="btn btn-primary">Add To Cart — {{ cv.price | money | default: '$34.00' }}</a>
+</div>

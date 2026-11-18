@@ -1,34 +1,5 @@
-<!doctype html>
-{%- comment -%}
-  SHOPIFY PAGE MAPPING: templates/gift_card.liquid -> GIFT CARD page (standalone printable page).
-{%- endcomment -%}
-<html lang="{{ request.locale.iso_code }}">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ shop.name }} — Gift Card</title>
-  {{ content_for_header }}
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  {{ 'theme.css' | asset_url | stylesheet_tag }}
-</head>
-<body class="template-gift-card">
-  <div class="giftcard">
-    <div class="giftcard__card">
-      <div class="giftcard__brand">{{ shop.name }}</div>
-      <p class="giftcard__label">Gift Card</p>
-      <div class="giftcard__value">{{ gift_card.initial_value | money }}</div>
-      <div class="giftcard__qr">
-        {{ gift_card.qr_identifier }}
-      </div>
-      <div class="giftcard__code">
-        <span>{{ gift_card.code | format_code }}</span>
-      </div>
-      {% if gift_card.expired %}
-        <p class="giftcard__expired">This gift card has expired.</p>
-      {% endif %}
-      <a href="{{ shop.url }}" class="btn btn-primary btn-lg">Use It On A Jar →</a>
-    </div>
-  </div>
-</body>
-</html>
+<!DOCTYPE html>
+{%- comment -%} SHOPIFY PAGE MAPPING: templates/gift_card.liquid -> GIFT CARD PAGE {%- endcomment -%}
+<html lang="{{ request.locale.iso_code }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ shop.name }} Gift Card</title>{{ content_for_header }}
+<style>body{font-family:system-ui,sans-serif;background:#F4ECDF;color:#20140C;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0}.gc{background:#fff;border-radius:18px;padding:40px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.1);max-width:360px}.gc h1{font-size:1.3rem;margin:0 0 6px}.gc .v{font-size:2.6rem;color:#C2863F;margin:14px 0}.gc .code{background:#FBF4E8;border:1px dashed #C2863F;border-radius:10px;padding:12px;font-family:monospace;letter-spacing:2px;margin:14px 0}</style></head>
+<body><div class="gc"><h1>{{ shop.name }}</h1><p>Gift Card</p><div class="v">{{ gift_card.initial_value | money }}</div><div class="code">{{ gift_card.code | format_code }}</div><a href="{{ shop.url }}" style="color:#C2863F;font-weight:600">Use it on a jar →</a></div></body></html>
