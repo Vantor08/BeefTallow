@@ -282,3 +282,8 @@ h1,h2,h3,h4{font-family:var(--serif);font-weight:500;line-height:1.1;letter-spac
   .ctbl{font-size:.78rem}
   .ctbl th,.ctbl td{padding:9px 6px}
 }
+
+.subrow{cursor:pointer}
+.subrow input:checked ~ .subrow__t{background:var(--gold)}
+.subrow input:checked ~ .subrow__t::after{left:auto;right:3px}
+.subfreq .subopt{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.82rem}

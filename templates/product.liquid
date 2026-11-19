@@ -81,8 +81,13 @@
           <div><span class="price-was" style="font-size:.9rem">$147</span> <span class="tier__pr">$59.99</span></div>
         </div>
       </label>
-      <div class="subrow"><span>Subscribe &amp; save 15%: zero commitment, cancel anytime</span><span class="subrow__t"></span></div>
-      <div class="subfreq"><span><b>1 bundle</b> · every 30 days</span><span><b>2 bundles</b> · every 60 days</span><span><b>3 bundles</b> · every 90 days</span></div>
+      <label class="subrow" for="subToggle"><span>Subscribe &amp; save 15%: zero commitment, cancel anytime</span><input type="checkbox" id="subToggle" hidden{% if product.selling_plan_groups.size == 0 %} disabled{% endif %}><span class="subrow__t"></span></label>
+      {% if product.selling_plan_groups.size > 0 %}
+      <div class="subfreq" id="subFreq" hidden>{% for plan in product.selling_plan_groups.first.selling_plans %}<label class="subopt"><input type="radio" name="selling_plan_opt" value="{{ plan.id }}"{% if forloop.first %} checked{% endif %}> {{ plan.name }}</label>{% endfor %}</div>
+      <input type="hidden" name="selling_plan" id="sellingPlanInput">
+      {% else %}
+      <div class="subfreq"><span><b>1 bundle</b> &middot; every 30 days</span><span><b>2 bundles</b> &middot; every 60 days</span><span><b>3 bundles</b> &middot; every 90 days</span></div>
+      {% endif %}
       <button type="submit" name="add" class="btn btn-cta btn-lg btn-full atc" id="pdpAtc">🛒 Add to cart — <span id="atcPrice">{{ cv.price | money }}</span></button>
     </form>
 

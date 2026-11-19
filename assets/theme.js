@@ -30,6 +30,15 @@ document.addEventListener('DOMContentLoaded',function(){
     tr.innerHTML=tr.innerHTML+tr.innerHTML;
     r.appendChild(tr);
   });
+  // init default (pre-selected) bundle
+  (function(){var s=document.querySelector("[data-tier].sel");if(s){var v=s.getAttribute("data-variant"),p=s.getAttribute("data-price"),h=document.getElementById("pdpVariantId");if(v&&h)h.value=v;if(p){var a=document.getElementById("atcPrice");if(a)a.textContent=p;document.querySelectorAll(".jsBuyPrice").forEach(function(b){b.textContent=p;});}}})();
+  // subscribe toggle -> selling plan
+  var st=document.getElementById("subToggle"),sf=document.getElementById("subFreq"),sp=document.getElementById("sellingPlanInput");
+  if(st&&sp){
+    function syncSP(){ if(st.checked){ if(sf)sf.hidden=false; var r=document.querySelector("input[name=selling_plan_opt]:checked"); sp.value=r?r.value:""; } else { if(sf)sf.hidden=true; sp.value=""; } }
+    st.addEventListener("change",syncSP);
+    document.querySelectorAll("input[name=selling_plan_opt]").forEach(function(x){x.addEventListener("change",syncSP);});
+  }
   // sticky ATC
   var buy=document.getElementById('buy'),bar=document.getElementById('stickyAtc');
   if(buy&&bar&&'IntersectionObserver'in window){
