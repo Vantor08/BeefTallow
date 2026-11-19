@@ -17,8 +17,9 @@ document.addEventListener('DOMContentLoaded',function(){
       var vid=tr.getAttribute('data-variant'),hid=document.getElementById('pdpVariantId');
       if(vid&&hid)hid.value=vid;
       var pr=tr.getAttribute('data-price');
-      var ap=document.getElementById('atcPrice'),bp=document.getElementById('buyPrice');
-      if(pr&&ap)ap.textContent=pr; if(pr&&bp)bp.textContent=pr;
+      var ap=document.getElementById('atcPrice');
+      if(pr&&ap)ap.textContent=pr;
+      if(pr)document.querySelectorAll('.jsBuyPrice').forEach(function(bp){bp.textContent=pr;});
     });
   });
   // review carousel (always moving)

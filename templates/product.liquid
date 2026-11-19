@@ -21,6 +21,12 @@
 <div class="crumb"><a href="{{ routes.root_url }}">Home</a> / {{ product.title | default: 'Vallore Tallow Balm' }}</div>
 
 <section class="pdp" id="buy">
+  <div class="buy__head-mob">
+    <span class="eyebrow">Beef Tallow · For Men</span>
+    <h1>{{ product.title | default: 'Vallore Tallow Balm' }}</h1>
+    <div class="rr"><span class="stars">★★★★★</span><b>4.8</b><span class="muted">· 2,140 reviews</span></div>
+    <div class="buy__price"><span class="price-now jsBuyPrice">{{ cv.price | money }}</span>{% if cv.compare_at_price > cv.price %}<span class="price-was">{{ cv.compare_at_price | money }}</span>{% endif %}<span class="badge">60% OFF</span></div>
+  </div>
   <div class="gal">
     <div class="gal__main"><img id="galMain" src="{{ img_hero }}" alt="{{ product.title }}"></div>
     <div class="gal__thumbs">
@@ -33,10 +39,12 @@
   </div>
 
   <div class="buy">
+    <div class="buy__head-desk">
     <span class="eyebrow">Beef Tallow · For Men</span>
     <h1>{{ product.title | default: 'Vallore Tallow Balm' }}</h1>
     <div class="rr"><span class="stars">★★★★★</span><b>4.8</b><span class="muted">· 2,140 reviews</span></div>
-    <div class="buy__price"><span class="price-now" id="buyPrice">{{ cv.price | money }}</span>{% if cv.compare_at_price > cv.price %}<span class="price-was">{{ cv.compare_at_price | money }}</span>{% endif %}<span class="badge">60% OFF</span></div>
+    <div class="buy__price"><span class="price-now jsBuyPrice" id="buyPrice">{{ cv.price | money }}</span>{% if cv.compare_at_price > cv.price %}<span class="price-was">{{ cv.compare_at_price | money }}</span>{% endif %}<span class="badge">60% OFF</span></div>
+    </div>
 
     <ul class="blist">
       <li><span class="ck">✓</span>Stop looking tired in every photo she takes</li>
