@@ -80,7 +80,7 @@
     document.addEventListener("submit",function(e){
       var f=e.target;if(f&&f.getAttribute&&(f.getAttribute("action")||"").indexOf("/cart/add")>-1){
         e.preventDefault();
-        var fd=new FormData(f);if(fd.get("selling_plan")==="")fd.delete("selling_plan");fetch("/cart/add.js",{method:"POST",body:fd,headers:{"X-Requested-With":"XMLHttpRequest"}}).then(function(r){if(r.ok){openCart();}else{r.json().then(function(e){console.error("Cart add error:",e);openCart();}).catch(function(){f.submit();});}}).catch(function(){f.submit();});
+              var fd=new FormData(f);if(fd.get("selling_plan")==="")fd.delete("selling_plan");var prior=f.querySelector("[data-cart-error]");if(prior)prior.remove();fetch("/cart/add.js",{method:"POST",body:fd,headers:{"X-Requested-With":"XMLHttpRequest"}}).then(function(r){if(r.ok){openCart();return;}return r.json().then(function(err){throw new Error(err.description||err.message||"This item could not be added. Please try again.");});}).catch(function(err){var message=document.createElement("p");message.setAttribute("data-cart-error","");message.setAttribute("role","alert");message.textContent=err.message||"Unable to add this item. Please check your connection and try again.";f.appendChild(message);message.scrollIntoView({block:"nearest"});});
       }
     },true);
     document.addEventListener("click",function(e){
