@@ -1,87 +1,24 @@
-<!--
-  SHOPIFY PAGE MAPPING: sections/footer.liquid
-  Renders on: ALL pages (via layout/theme.liquid)
-  Purpose: Site footer with links, payment icons, legal disclaimer
-  Shopify page types covered: All
--->
-
-<footer class="site-footer" role="contentinfo">
-  <div class="site-footer__inner">
-
-    <!-- Brand col -->
-    <div class="site-footer__brand">
-      <h3>{{ shop.name | upcase }}</h3>
-      <p>Grass-fed beef tallow balm made for men who want one simple thing that actually works.</p>
-    </div>
-
-    <!-- Shop links -->
-    <div class="site-footer__col">
-      <h4>Shop</h4>
-      <ul>
-        <li><a href="/products/face-ritual-tallow-balm">Tallow Balm</a></li>
-        <li><a href="{{ routes.root_url }}#our-story">Our Story</a></li>
-        <li><a href="/pages/reviews">Reviews</a></li>
-        <li><a href="/pages/faq">FAQ</a></li>
-      </ul>
-    </div>
-
-    <!-- Support links -->
-    <div class="site-footer__col">
-      <h4>Support</h4>
-      <ul>
-        <li><a href="/pages/track-order">Track Order</a></li>
-        <li><a href="/pages/contact">Contact Us</a></li>
-        <li><a href="/pages/shipping">Shipping & Returns</a></li>
-        <li><a href="/pages/refund-policy">Refund Policy</a></li>
-      </ul>
-    </div>
-
-    <!-- Legal links -->
-    <div class="site-footer__col">
-      <h4>Legal</h4>
-      <ul>
-        <li><a href="{{ shop.privacy_policy.url }}">Privacy Policy</a></li>
-        <li><a href="{{ shop.terms_of_service.url }}">Terms of Service</a></li>
-        <li><a href="{{ shop.refund_policy.url }}">Refund Policy</a></li>
-        <li><a href="{{ shop.shipping_policy.url }}">Shipping Policy</a></li>
-      </ul>
-    </div>
-
+{%- comment -%} SHOPIFY SECTION: sections/footer.liquid -> site footer {%- endcomment -%}
+<footer class="foot">
+  <div class="foot__logo">{{ settings.logo_text | default: 'VALLORE' }}</div>
+  <p class="foot__tag">Beef tallow, built for men who don't have time for a routine.</p>
+  <nav class="foot__nav">
+    <a href="/products/{{ settings.product_handle | default: 'vallore-beef-tallow' }}">Shop</a>
+    <a href="/pages/about">Our story</a>
+    <a href="{{ routes.root_url }}#reviews">Reviews</a>
+    <a href="/pages/faq">FAQ</a>
+    <a href="/pages/track-order">Track order</a>
+    <a href="/pages/contact">Contact</a>
+  </nav>
+  <div class="foot__sub">
+    <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">Shipping &amp; Returns</a>
+    <a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">Refund policy</a>
+    <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">Privacy</a>
+    <a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">Terms</a>
   </div>
-
-  <!-- Bottom bar -->
-  <div class="container">
-    <div class="site-footer__bottom">
-      <div class="site-footer__legal">
-        <p>© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
-        <p>These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
-      </div>
-      <div class="site-footer__payments" aria-label="Accepted payment methods">
-        <span class="payment-icon">VISA</span>
-        <span class="payment-icon">MC</span>
-        <span class="payment-icon">AMEX</span>
-        <span class="payment-icon">APPLE PAY</span>
-        <span class="payment-icon">SHOP PAY</span>
-      </div>
-    </div>
-  </div>
+  <div class="foot__pay">VISA · MASTERCARD · AMEX · APPLE PAY · SHOP PAY</div>
+  <div class="foot__legal">These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease. © {{ 'now' | date: '%Y' }} {{ shop.name }}.</div>
 </footer>
-
 {% schema %}
-{
-  "name": "Footer",
-  "settings": [
-    {
-      "type": "richtext",
-      "id": "brand_description",
-      "label": "Brand description",
-      "default": "<p>Grass-fed beef tallow balm made for men who want one simple thing that actually works.</p>"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Footer"
-    }
-  ]
-}
+{ "name": "Footer" }
 {% endschema %}

@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <!--
   SHOPIFY PAGE MAPPING: layout/theme.liquid
-  Master wrapper for EVERY page. All shared styles + header + footer + JS are baked
-  in here so the theme is self-contained — no external asset files that could go missing.
-  Each page's own styles live inside its template file. Page body renders at content_for_layout.
+  Master wrapper for EVERY page. Loads assets/theme.css + assets/theme.js, and renders the
+  announcement-bar, header and footer sections. Page content renders at content_for_layout.
 -->
 <html lang="{{ request.locale.iso_code }}">
 <head>
@@ -21,180 +20,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#F4ECDF; --bg2:#FFFFFF; --bg3:#FBF4E8; --brown:#20140C;
-      --gold:#C2863F; --gold2:#D7A463; --cta:#3A2414; --ctatext:#F3E9DB;
-      --line:rgba(32,20,12,.12); --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,sans-serif;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{font-family:var(--sans);background:var(--bg);color:var(--brown);line-height:1.6;-webkit-font-smoothing:antialiased}
-    img{max-width:100%;height:auto;display:block}
-    a{color:inherit;text-decoration:none}
-    .container{max-width:1200px;margin:0 auto;padding:0 20px}
-    .section{padding:72px 0}
-    .section--cream{background:var(--bg3)}
-    .section--white{background:var(--bg2)}
-    .text-center{text-align:center}
-    h1,h2,h3,h4{font-family:var(--serif);font-weight:400;line-height:1.12;letter-spacing:-.01em}
-    .h2{font-size:clamp(1.7rem,4vw,2.6rem)}
-    .overline{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
-    .lead{font-size:1.08rem}
-    .stars{color:var(--gold);letter-spacing:1px}
-    .stars-lg{font-size:1.1rem}
-    .rating-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-    .count{opacity:.6;font-size:.9rem}
-    .price{font-family:var(--serif);font-size:1.6rem;color:var(--brown)}
-    .price-compare{text-decoration:line-through;opacity:.5}
-    .price-badge{background:var(--gold);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.04em}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--sans);font-weight:600;font-size:.98rem;padding:14px 26px;border-radius:999px;border:1.5px solid transparent;cursor:pointer;transition:.18s;text-align:center}
-    .btn-primary{background:var(--cta);color:var(--ctatext)}
-    .btn-primary:hover{background:#4a2f1a}
-    .btn-gold{background:var(--gold);color:#fff}
-    .btn-gold:hover{background:var(--gold2)}
-    .btn-outline{background:transparent;border-color:var(--brown);color:var(--brown)}
-    .btn-outline:hover{background:var(--brown);color:var(--bg)}
-    .btn-lg{padding:17px 34px;font-size:1.05rem}
-    .btn-full{width:100%}
-    .announcement-bar{background:var(--brown);color:var(--ctatext);text-align:center;font-size:.8rem;letter-spacing:.08em;padding:9px 12px;font-weight:500}
-    .site-header{position:sticky;top:0;z-index:50;background:rgba(244,236,223,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-    .site-header__inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .site-header__logo{font-family:var(--serif);font-size:1.4rem;letter-spacing:.12em;font-weight:500}
-    .site-header__nav{display:flex;gap:28px;font-size:.92rem;font-weight:500}
-    .site-header__nav a:hover{color:var(--gold)}
-    .site-header__icons{display:flex;gap:16px;align-items:center}
-    .header-icon{width:22px;height:22px}
-    .site-header__cart-count{position:absolute;top:-8px;right:-10px;background:var(--gold);color:#fff;font-size:.65rem;font-weight:700;min-width:16px;height:16px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 4px}
-    .nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
-    .nav-toggle span{width:24px;height:2px;background:var(--brown);border-radius:2px}
-    .nav-drawer{position:fixed;inset:0 40% 0 0;background:var(--bg2);z-index:100;padding:28px 24px;transform:translateX(-105%);transition:.28s;box-shadow:2px 0 30px rgba(0,0,0,.15)}
-    .nav-drawer.open{transform:translateX(0)}
-    .nav-drawer__close{position:absolute;top:18px;right:18px;background:none;border:none;font-size:1.3rem;cursor:pointer}
-    .nav-drawer__logo{font-family:var(--serif);font-size:1.3rem;letter-spacing:.12em;margin-bottom:28px}
-    .nav-drawer__links{display:flex;flex-direction:column;gap:18px;font-size:1.05rem;font-weight:500}
-    .site-footer{background:var(--brown);color:var(--ctatext);margin-top:0;padding-top:56px}
-    .site-footer__inner{max-width:1200px;margin:0 auto;padding:0 20px 40px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px}
-    .site-footer__brand h3{font-size:1.4rem;letter-spacing:.1em;margin-bottom:12px}
-    .site-footer__brand p{opacity:.7;font-size:.92rem;max-width:300px}
-    .site-footer__col h4{font-family:var(--sans);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6;margin-bottom:14px;font-weight:600}
-    .site-footer__col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
-    .site-footer__col a{opacity:.85;font-size:.92rem}
-    .site-footer__col a:hover{opacity:1;color:var(--gold2)}
-    .site-footer__bottom{border-top:1px solid rgba(243,233,219,.15);padding:22px 0 40px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
-    .site-footer__legal p{opacity:.55;font-size:.74rem;max-width:620px;margin-bottom:4px}
-    .site-footer__payments{display:flex;gap:8px;flex-wrap:wrap}
-    .payment-icon{background:rgba(243,233,219,.1);border:1px solid rgba(243,233,219,.2);border-radius:5px;font-size:.6rem;font-weight:700;letter-spacing:.04em;padding:5px 7px;opacity:.8}
-    @media(max-width:768px){
-      .site-header__nav{display:none}
-      .nav-toggle{display:flex}
-      .site-footer__inner{grid-template-columns:1fr 1fr;gap:28px}
-      .section{padding:52px 0}
-    }
-    @media(max-width:480px){.site-footer__inner{grid-template-columns:1fr}}
-  </style>
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
 </head>
 
 <body class="template-{{ template | replace: '.', '-' }}{% if template == 'index' %} page-home{% endif %}">
 
-  <div class="announcement-bar"><p>{{ settings.announcement_text | default: '40% OFF · FREE SHIPPING OVER $45 · EARLY BLACK FRIDAY' }}</p></div>
-
-  <header class="site-header">
-    <div class="site-header__inner">
-      <button class="nav-toggle" id="navToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
-      <a href="{{ routes.root_url }}" class="site-header__logo">{{ settings.logo_text | default: shop.name | upcase }}</a>
-      <nav class="site-header__nav">
-        <a href="{{ routes.root_url }}">Home</a>
-        <a href="/products/{{ settings.product_handle | default: 'face-ritual-tallow-balm' }}">Shop</a>
-        <a href="{{ routes.root_url }}#story">Our Story</a>
-        <a href="{{ routes.root_url }}#reviews">Reviews</a>
-        <a href="{{ routes.root_url }}#faq">FAQ</a>
-      </nav>
-      <div class="site-header__icons">
-        <a href="{{ routes.search_url }}" aria-label="Search"><svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></a>
-        <a href="{{ routes.cart_url }}" aria-label="Cart" style="position:relative;display:flex;align-items:center"><svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>{% if cart.item_count > 0 %}<span class="site-header__cart-count">{{ cart.item_count }}</span>{% endif %}</a>
-      </div>
-    </div>
-  </header>
-
-  <div class="nav-drawer" id="navDrawer">
-    <button class="nav-drawer__close" id="navClose" aria-label="Close menu">✕</button>
-    <div class="nav-drawer__logo">{{ settings.logo_text | default: shop.name | upcase }}</div>
-    <nav class="nav-drawer__links">
-      <a href="{{ routes.root_url }}">Home</a>
-      <a href="/products/{{ settings.product_handle | default: 'face-ritual-tallow-balm' }}">Shop Now</a>
-      <a href="{{ routes.root_url }}#story">Our Story</a>
-      <a href="{{ routes.root_url }}#reviews">Reviews</a>
-      <a href="{{ routes.root_url }}#faq">FAQ</a>
-      <a href="/pages/contact">Contact</a>
-    </nav>
-  </div>
+  {%- section 'announcement-bar' -%}
+  {%- section 'header' -%}
 
   <main id="main-content">{{ content_for_layout }}</main>
 
-  <footer class="site-footer">
-    <div class="site-footer__inner">
-      <div class="site-footer__brand">
-        <h3>{{ settings.logo_text | default: shop.name | upcase }}</h3>
-        <p>Grass-fed beef tallow balm made for men who want one simple thing that actually works.</p>
-      </div>
-      <div class="site-footer__col"><h4>Shop</h4><ul>
-        <li><a href="/products/{{ settings.product_handle | default: 'face-ritual-tallow-balm' }}">Tallow Balm</a></li>
-        <li><a href="{{ routes.root_url }}#story">Our Story</a></li>
-        <li><a href="{{ routes.root_url }}#reviews">Reviews</a></li>
-        <li><a href="{{ routes.root_url }}#faq">FAQ</a></li>
-      </ul></div>
-      <div class="site-footer__col"><h4>Support</h4><ul>
-        <li><a href="/pages/contact">Contact Us</a></li>
-        <li><a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">Shipping &amp; Returns</a></li>
-        <li><a href="{{ shop.refund_policy.url | default: '/policies/refund-policy' }}">Refund Policy</a></li>
-      </ul></div>
-      <div class="site-footer__col"><h4>Legal</h4><ul>
-        <li><a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">Privacy Policy</a></li>
-        <li><a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}">Terms of Service</a></li>
-      </ul></div>
-    </div>
-    <div class="container"><div class="site-footer__bottom">
-      <div class="site-footer__legal">
-        <p>© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
-        <p>These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
-      </div>
-      <div class="site-footer__payments"><span class="payment-icon">VISA</span><span class="payment-icon">MC</span><span class="payment-icon">AMEX</span><span class="payment-icon">APPLE PAY</span><span class="payment-icon">SHOP PAY</span></div>
-    </div></div>
-  </footer>
+  {%- section 'footer' -%}
 
-  <script>
-    document.addEventListener('DOMContentLoaded',function(){
-      var t=document.getElementById('navToggle'),d=document.getElementById('navDrawer'),c=document.getElementById('navClose');
-      if(t&&d){t.addEventListener('click',function(){d.classList.add('open')});}
-      if(c&&d){c.addEventListener('click',function(){d.classList.remove('open')});}
-      document.addEventListener('keydown',function(e){if(e.key==='Escape'&&d)d.classList.remove('open')});
-      document.querySelectorAll('[data-revcar]').forEach(function(car){
-        var track=car.querySelector('[data-revtrack]');var dots=car.parentNode.querySelectorAll('[data-revdot]');
-        var cards=track?track.children:[];if(!track||cards.length===0)return;var i=0;
-        function go(n){i=(n+cards.length)%cards.length;track.style.transform='translateX(-'+(i*100)+'%)';
-          dots.forEach(function(dt,k){dt.classList.toggle('active',k===i);});}
-        dots.forEach(function(dt,k){dt.addEventListener('click',function(){go(k);});});
-        setInterval(function(){go(i+1);},3500);go(0);
-      });
-      document.querySelectorAll('[data-faq]').forEach(function(item){
-        var trig=item.querySelector('[data-faq-trig]');
-        if(trig)trig.addEventListener('click',function(){item.classList.toggle('open');});
-      });
-      document.querySelectorAll('[data-tier]').forEach(function(tier){
-        tier.addEventListener('click',function(){
-          document.querySelectorAll('[data-tier]').forEach(function(t){t.classList.remove('selected');});
-          tier.classList.add('selected');
-          var r=tier.querySelector('input[type=radio]');if(r)r.checked=true;
-          var vid=tier.getAttribute('data-variant');var hid=document.getElementById('pdpVariantId');
-          if(vid&&hid)hid.value=vid;
-        });
-      });
-      var buy=document.getElementById('buy'),bar=document.getElementById('stickyAtc');
-      if(buy&&bar&&'IntersectionObserver'in window){
-        new IntersectionObserver(function(e){bar.classList.toggle('show',!e[0].isIntersecting&&e[0].boundingClientRect.top<0);},{threshold:0}).observe(buy);
-      }
-    });
-  </script>
+  {{ 'theme.js' | asset_url | script_tag }}
 </body>
 </html>
