@@ -237,3 +237,5 @@ h1,h2,h3,h4{font-family:var(--serif);font-weight:500;line-height:1.1;letter-spac
   .ctbl{font-size:.78rem}
   .ctbl th,.ctbl td{padding:9px 6px}
 }
+
+.gal__main img,.gal__t img,.hero__img img,.two__img img{width:100%;height:100%;object-fit:cover;display:block}
