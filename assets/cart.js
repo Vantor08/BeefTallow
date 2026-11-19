@@ -80,7 +80,7 @@
     document.addEventListener("submit",function(e){
       var f=e.target;if(f&&f.getAttribute&&(f.getAttribute("action")||"").indexOf("/cart/add")>-1){
         e.preventDefault();
-        fetch("/cart/add.js",{method:"POST",body:new FormData(f),headers:{"X-Requested-With":"XMLHttpRequest"}}).then(function(){openCart();}).catch(function(){f.submit();});
+        var fd=new FormData(f);if(fd.get("selling_plan")==="")fd.delete("selling_plan");fetch("/cart/add.js",{method:"POST",body:fd,headers:{"X-Requested-With":"XMLHttpRequest"}}).then(function(r){if(r.ok){openCart();}else{r.json().then(function(e){console.error("Cart add error:",e);openCart();}).catch(function(){f.submit();});}}).catch(function(){f.submit();});
       }
     },true);
     document.addEventListener("click",function(e){
