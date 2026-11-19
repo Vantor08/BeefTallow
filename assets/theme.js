@@ -45,3 +45,42 @@ document.addEventListener('DOMContentLoaded',function(){
     new IntersectionObserver(function(e){bar.classList.toggle('show',!e[0].isIntersecting&&e[0].boundingClientRect.top<0);},{threshold:0}).observe(buy);
   }
 });
+
+
+// Keep the subscription schedule and displayed price in sync with the bundle.
+document.addEventListener("DOMContentLoaded", function () {
+  var toggle = document.getElementById("subToggle");
+  var frequency = document.getElementById("subFreq");
+  var planInput = document.getElementById("sellingPlanInput");
+  var form = document.getElementById("pdpForm");
+  if (!toggle || !frequency || !planInput || !form) return;
+  var tiers = Array.from(form.querySelectorAll("[data-tier]"));
+  var plans = Array.from(form.querySelectorAll("input[name=selling_plan_opt]"));
+  function syncBundleSubscription(matchBundle) {
+    var tier = form.querySelector("[data-tier].sel");
+    var index = Math.max(0, tiers.indexOf(tier));
+    if (matchBundle && plans[index]) plans[index].checked = true;
+    var selected = form.querySelector("input[name=selling_plan_opt]:checked");
+    var subscribed = toggle.checked && !!selected;
+    frequency.hidden = !toggle.checked;
+    frequency.style.display = toggle.checked ? "grid" : "none";
+    planInput.value = subscribed ? selected.value : "";
+    if (!tier) return;
+    var base = Number(tier.getAttribute("data-price").replace(/[^0-9.]/g, ""));
+    if (!Number.isFinite(base)) return;
+    var cents = Math.round(base * 100);
+    if (subscribed) cents = Math.round(cents * 0.85);
+    var price = "$" + (cents / 100).toFixed(2);
+    document.querySelectorAll(".jsBuyPrice, #atcPrice").forEach(function (element) {
+      element.textContent = price;
+    });
+  }
+  tiers.forEach(function (tier) {
+    tier.addEventListener("click", function () { syncBundleSubscription(true); });
+  });
+  toggle.addEventListener("change", function () { syncBundleSubscription(true); });
+  plans.forEach(function (plan) {
+    plan.addEventListener("change", function () { syncBundleSubscription(false); });
+  });
+  syncBundleSubscription(true);
+});
