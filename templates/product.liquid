@@ -208,29 +208,11 @@
   </div>
 </section>
 
-<div class="angle">
-  <div class="angle__img"><img src="{{ img_dad }}" alt="A dad and his kid at the sink" style="width:100%;height:100%;object-fit:cover"></div>
-  <span class="eyebrow">The Stool By The Sink</span>
-  <h2>You used to be that kid.</h2>
-  <p>You used to stand on a stool and watch your dad get ready — the soap, the splash of water, the way he carried himself out the door. Now there's a stool next to <strong>your</strong> sink, and someone small is standing on it, watching you.</p>
-  <p class="angle__pull">One morning they'll catch themselves and realize they became the man they looked up to. Give them something worth copying.</p>
-</div>
-<div class="angle__div"></div>
-<div class="angle">
-  <div class="angle__img"><img src="{{ img_camera }}" alt="Family selfie" style="width:100%;height:100%;object-fit:cover"></div>
-  <span class="eyebrow">Behind The Camera</span>
-  <h2>You're always the one taking the picture.</h2>
-  <p>You're the guy who grabs everyone's phone so the shot comes out right. Years of birthdays, trips and ordinary Sundays — and you're in almost none of them.</p>
-  <p>Some of that is being the dependable one. Some of it is not loving how you've looked lately. <strong>Ten seconds a day handles the second part — so you stop staying behind the camera.</strong></p>
-</div>
-<div class="angle__div"></div>
-<div class="angle">
-  <div class="angle__img"><img src="{{ img_shelf }}" alt="A shelf of her products" style="width:100%;height:100%;object-fit:cover"></div>
-  <span class="eyebrow">The Morning Routine</span>
-  <h2>Her shelf. Your one jar.</h2>
-  <p>Your wife has a whole shelf — cleanser, serum, eye cream, the works. You looked at all those bottles and thought, "yeah, I'm never doing that," and walked out the door with dry skin instead.</p>
-  <p><strong>One jar by the sink. Ten seconds. Done before she can ask "you're done already?"</strong> A routine you'll actually keep, because it isn't one.</p>
-</div>
+<section class="vl-life" aria-label="A simpler daily routine"><div class="wrap">
+<article class="vl-life__row"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_3I4H0AgrfstnInKZI1lAtsjGBeQ/hf_20261120_013918_51a05bb7-0294-4019-8f8b-c10e98c6e6ad.png" alt="A father and son sharing a quiet morning routine" loading="lazy"><div><span class="eyebrow">The little things he notices</span><h2>A habit worth passing on.</h2><p>He sees how you start your day. Taking a moment for yourself can be part of the example you set.</p><ul><li>A simple step after washing</li><li>A little balm, gently pressed in</li><li>A routine that fits real mornings</li></ul></div></article>
+<article class="vl-life__row"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_3I4H0AgrfstnInKZI1lAtsjGBeQ/hf_20261120_013918_b7fa04d3-0fce-425c-9163-e5b4af185492.png" alt="A father enjoying a family walk outdoors" loading="lazy"><div><span class="eyebrow">Be part of the moment</span><h2>You belong in the picture, too.</h2><p>The everyday photos become the ones you keep. Make room for a little self-care, then get back to being there.</p><ul><li>Daily care without the complicated routine</li><li>A rich balm for dry-feeling skin</li><li>More time for the people who matter</li></ul></div></article>
+<article class="vl-life__row"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_3I4H0AgrfstnInKZI1lAtsjGBeQ/hf_20261120_013918_6659074c-12c5-4726-ae8c-4586c7e84a88.png" alt="A simple balm jar beside a neatly arranged skincare routine" loading="lazy"><div><span class="eyebrow">Keep your counter simple</span><h2>One jar. An easier morning.</h2><p>Your routine should feel like yours. Keep your moisturizing step simple with a small amount of balm after you wash.</p><ul><li>One straightforward moisturizing step</li><li>No crowded shelf required</li><li>Start small and adjust to your skin</li></ul></div></article>
+</div></section>
 
 <section class="section section--alt">
   <div class="wrap tc">
@@ -287,3 +269,9 @@
   <span class="satc__p"><span class="price-now">$34</span> <span class="price-was">$49</span></span>
   <a href="#buy" class="btn btn-cta">Choose your supply →</a>
 </div>
+
+<section class="section section--alt" id="vallore-ingredients"><div class="wrap vl-ingredients"><div><span class="eyebrow">Ingredients</span><h2 class="h2-serif">Start with the balm.</h2><p>A tallow-based moisturizing step, made to keep your daily routine straightforward.</p></div><div class="vl-ingredients__card"><h3>Beef tallow</h3><p>The base of this rich balm. Start with a small amount, warm it between your fingers, and apply to clean skin.</p><details><summary>Full formula &amp; skin considerations</summary><p>{% if product.metafields.custom.ingredients != blank %}{{ product.metafields.custom.ingredients | metafield_tag }}{% else %}For the complete ingredient list, check your product packaging. Patch test before first use and avoid any ingredient you are sensitive to.{% endif %}</p></details></div></div></section>
+<style>
+.vl-life{padding:40px 0 64px}.vl-life__row{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding:36px 0}.vl-life__row:nth-child(even)>img{order:2}.vl-life__row>img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:20px}.vl-life__row h2{font-family:var(--font-heading,Georgia),serif;font-size:clamp(28px,3vw,40px);line-height:1.13;margin:12px 0 18px;max-width:430px}.vl-life__row p{font-size:16px;line-height:1.7;max-width:440px}.vl-life__row ul{list-style:none;padding:0;margin:22px 0 0}.vl-life__row li{padding:7px 0 7px 27px;position:relative;line-height:1.5}.vl-life__row li:before{content:'✓';position:absolute;left:0;color:#a37538}.vl-ingredients{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}.vl-ingredients p{line-height:1.7}.vl-ingredients__card{background:#fffdf8;border:1px solid #dfd7ca;border-radius:18px;padding:30px}.vl-ingredients__card h3{font-family:Georgia,serif;font-size:28px;margin:0 0 14px}.vl-ingredients details{border-top:1px solid #dfd7ca;padding-top:18px;margin-top:20px}.vl-ingredients summary{cursor:pointer;font-weight:600}@media(max-width:749px){.vl-life{padding:18px 0 36px}.vl-life__row,.vl-ingredients{grid-template-columns:1fr;gap:24px}.vl-life__row{padding:24px 0}.vl-life__row:nth-child(even)>img{order:0}.vl-life__row h2{font-size:30px}.vl-ingredients__card{padding:24px}}
+</style>
+<script>document.addEventListener('DOMContentLoaded',function(){var how=document.getElementById('vallore-science');var results=document.querySelector('.ba');var comparison=document.querySelector('.ctbl');var ingredients=document.getElementById('vallore-ingredients');if(how&&results&&comparison&&ingredients){results=results.closest('section');comparison=comparison.closest('section');how.parentNode.insertBefore(ingredients,how);how.parentNode.insertBefore(results,how);how.parentNode.insertBefore(comparison,how);}});</script>
