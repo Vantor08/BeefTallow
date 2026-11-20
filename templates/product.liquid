@@ -5,7 +5,11 @@
 {%- assign v1 = product.variants[0] -%}
 {%- assign v2 = product.variants[1] | default: product.variants[0] -%}
 {%- assign v3 = product.variants[2] | default: product.variants[0] -%}
-{%- assign img_hero = product.media.last.preview_image | image_url: width: 1600 -%}
+{%- assign img_hero = 'hf_20261118_011622_491b2a95-7caa-4e99-b1b7-33aeead1267d.png' | file_url -%}
+{%- assign gallery_apply = 'hf_20261120_010940_359fe2c4-9f56-41c5-884d-d2bbac628ba5.png' | file_url -%}
+{%- assign gallery_hand = 'hf_20261120_005856_b3d21af8-21d2-459e-9c68-6280a39a8a16.png' | file_url -%}
+{%- assign gallery_simple = 'hf_20261120_011442_bcbb7145-0c60-4fe9-af21-20033ddbbf7b.png' | file_url -%}
+{%- assign gallery_demo = 'hf_20261120_012136_a65b859e-a6d9-48ab-adb3-5196fb072d04.png' | file_url -%}
 {%- assign img_open = 'https://cdn.shopify.com/s/files/1/0716/5411/3456/files/3fc99126b_product-open.png?v=1795057318' -%}
 {%- assign img_ing = 'https://cdn.shopify.com/s/files/1/0716/5411/3456/files/e21c8b2b5_product-ingredients.png?v=1795057318' -%}
 {%- assign img_dad = 'https://cdn.shopify.com/s/files/1/0716/5411/3456/files/663076dba_angle-dad.png?v=1795057318' -%}
@@ -30,12 +34,12 @@
   <div class="gal">
     <div class="gal__main"><img id="galMain" src="{{ img_hero }}" alt="{{ product.title }}"></div>
     <div class="gal__thumbs">
-      <button class="gal__t" onclick="document.getElementById('galMain').src='{{ img_hero }}'"><img src="{{ img_hero }}" alt=""></button>
-      <button class="gal__t" onclick="document.getElementById('galMain').src='{{ img_open }}'"><img src="{{ img_open }}" alt=""></button>
-      <button class="gal__t" onclick="document.getElementById('galMain').src='{{ img_ing }}'"><img src="{{ img_ing }}" alt=""></button>
-      <button class="gal__t" onclick="document.getElementById('galMain').src='{{ img_dad }}'"><img src="{{ img_dad }}" alt=""></button>
-      <button class="gal__t" onclick="document.getElementById('galMain').src='{{ img_shelf }}'"><img src="{{ img_shelf }}" alt=""></button>
-    </div>
+            <button type="button" class="gal__t active" aria-label="Vallore Tallow Balm" onclick="document.getElementById('galMain').src='{{ img_hero }}';this.parentNode.querySelectorAll('.gal__t').forEach(function(b){b.classList.remove('active')});this.classList.add('active')"><img src="{{ img_hero }}" alt="Vallore Tallow Balm" loading="lazy"></button>
+      <button type="button" class="gal__t" aria-label="Applying the balm" onclick="document.getElementById('galMain').src='{{ gallery_apply }}';this.parentNode.querySelectorAll('.gal__t').forEach(function(b){b.classList.remove('active')});this.classList.add('active')"><img src="{{ gallery_apply }}" alt="Man applying Vallore balm" loading="lazy"></button>
+      <button type="button" class="gal__t" aria-label="Jar in hand" onclick="document.getElementById('galMain').src='{{ gallery_hand }}';this.parentNode.querySelectorAll('.gal__t').forEach(function(b){b.classList.remove('active')});this.classList.add('active')"><img src="{{ gallery_hand }}" alt="Vallore jar held by a window" loading="lazy"></button>
+      <button type="button" class="gal__t" aria-label="Skincare simplified" onclick="document.getElementById('galMain').src='{{ gallery_simple }}';this.parentNode.querySelectorAll('.gal__t').forEach(function(b){b.classList.remove('active')});this.classList.add('active')"><img src="{{ gallery_simple }}" alt="One balm versus a multi-step routine" loading="lazy"></button>
+      <button type="button" class="gal__t" aria-label="AI demonstration: dry versus moisturized-looking skin" onclick="document.getElementById('galMain').src='{{ gallery_demo }}';this.parentNode.querySelectorAll('.gal__t').forEach(function(b){b.classList.remove('active')});this.classList.add('active')"><img src="{{ gallery_demo }}" alt="AI-generated skin illustration, not actual product results" loading="lazy"></button>
+div>
   </div>
 
   <div class="buy">
