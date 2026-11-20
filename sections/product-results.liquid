@@ -73,3 +73,9 @@
   ]
 }
 {% endschema %}
+
+<style>
+.template-product .results-grid{display:flex!important;overflow-x:auto!important;scroll-snap-type:x mandatory;gap:24px;padding:12px 4px 24px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-color:#B5863C #eee5d7;scrollbar-width:thin}
+.template-product .results-grid>.result-card{flex:0 0 calc((100% - 48px)/3);min-width:0;scroll-snap-align:start}
+@media(max-width:749px){.template-product .results-grid>.result-card{flex-basis:90%}.template-product .results-grid{gap:16px}}
+</style>
