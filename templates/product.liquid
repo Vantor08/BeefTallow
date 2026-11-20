@@ -5,7 +5,7 @@
 {%- assign v1 = product.variants[0] -%}
 {%- assign v2 = product.variants[1] | default: product.variants[0] -%}
 {%- assign v3 = product.variants[2] | default: product.variants[0] -%}
-{%- assign img_hero = 'https://cdn.shopify.com/s/files/1/0716/5411/3456/files/c6b959837_product-hero.png?v=1795057318' -%}
+{%- assign img_hero = product.media.last.preview_image | image_url: width: 1600 -%}
 {%- assign img_open = 'https://cdn.shopify.com/s/files/1/0716/5411/3456/files/3fc99126b_product-open.png?v=1795057318' -%}
 {%- assign img_ing = 'https://cdn.shopify.com/s/files/1/0716/5411/3456/files/e21c8b2b5_product-ingredients.png?v=1795057318' -%}
 {%- assign img_dad = 'https://cdn.shopify.com/s/files/1/0716/5411/3456/files/663076dba_angle-dad.png?v=1795057318' -%}
